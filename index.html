@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Expense Tracker</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="overview-wrap">
+    <button id="overviewBtn" class="overview-btn">
+      <span id="overviewLabel">Monthly View</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div id="overviewMenu" class="overview-menu hidden">
+      <button data-view="yearly">Yearly View</button>
+      <button data-view="calendar">Calendar Daily View</button>
+      <button data-view="monthly">Monthly View</button>
+    </div>
+  </div>
+
+  <div class="period-nav">
+    <button id="prevPeriod" class="nav-arrow" aria-label="Previous">‹</button>
+    <span id="periodLabel" class="period-label"></span>
+    <button id="nextPeriod" class="nav-arrow" aria-label="Next">›</button>
+  </div>
+
+  <div class="total-box">
+    <span class="total-caption" id="totalCaption">Total spent</span>
+    <span class="total-amount" id="totalAmount">$0.00</span>
+  </div>
+</header>
+
+<main id="viewContent" class="view-content"></main>
+
+<button id="fabAdd" class="fab" aria-label="Add expense">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+</button>
+
+<div id="modalOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Add Expense</h2>
+      <button id="closeModal" class="close-btn" aria-label="Close">&times;</button>
+    </div>
+
+    <form id="expenseForm">
+      <label class="field-label" for="categorySelect">Category</label>
+      <select id="categorySelect" required>
+        <option value="" disabled selected>Select category</option>
+      </select>
+
+      <label class="field-label" for="amountInput">Amount</label>
+      <input type="number" id="amountInput" step="0.01" min="0" placeholder="0.00" required />
+
+      <label class="field-label" for="noteInput">Note</label>
+      <textarea id="noteInput" rows="3" placeholder="Add a note (optional)"></textarea>
+
+      <label class="field-label" for="dateInput">Date</label>
+      <input type="date" id="dateInput" required />
+
+      <input type="hidden" id="editingId" value="" />
+
+      <div class="form-footer">
+        <button type="button" id="deleteBtn" class="delete-btn hidden">Delete</button>
+        <button type="submit" class="save-btn">SAVE</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
