@@ -8,37 +8,108 @@
 </head>
 <body>
 
-<header class="topbar">
-  <div class="overview-wrap">
-    <button id="overviewBtn" class="overview-btn">
-      <span id="overviewLabel">Monthly View</span>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>
-    <div id="overviewMenu" class="overview-menu hidden">
-      <button data-view="yearly">Yearly View</button>
-      <button data-view="calendar">Calendar Daily View</button>
-      <button data-view="monthly">Monthly View</button>
+<!-- ===== Login / Profile-select screen ===== -->
+<div id="loginScreen" class="login-screen hidden">
+  <div class="login-card">
+    <h1 id="loginTitle" data-i18n="login.title">Who's tracking expenses?</h1>
+
+    <div id="profileList" class="profile-list"></div>
+
+    <button id="showNewProfileBtn" class="secondary-btn" data-i18n="login.createNew">+ Create new profile</button>
+
+    <div id="newProfileForm" class="new-profile-form hidden">
+      <input id="newProfileName" type="text" data-i18n-placeholder="login.namePlaceholder" placeholder="Your name" />
+      <input id="newProfilePasscode" type="password" data-i18n-placeholder="login.passcodeOptional" placeholder="Passcode (optional)" />
+      <button id="createProfileBtn" class="save-btn" data-i18n="login.start">START</button>
     </div>
   </div>
+</div>
 
-  <div class="period-nav">
-    <button id="prevPeriod" class="nav-arrow" aria-label="Previous">‹</button>
-    <span id="periodLabel" class="period-label"></span>
-    <button id="nextPeriod" class="nav-arrow" aria-label="Next">›</button>
+<!-- ===== Passcode prompt ===== -->
+<div id="passcodeOverlay" class="modal-overlay hidden">
+  <div class="modal small-modal">
+    <div class="modal-header">
+      <h2 id="passcodeTitle" data-i18n="login.enterPasscodeTitle">Enter passcode</h2>
+      <button id="closePasscodeBtn" class="close-btn" aria-label="Close">&times;</button>
+    </div>
+    <input id="passcodeInput" type="password" data-i18n-placeholder="login.passcodePlaceholder" placeholder="Passcode" />
+    <div id="passcodeError" class="field-error hidden"></div>
+    <div class="form-footer">
+      <button id="passcodeSubmitBtn" class="save-btn" data-i18n="common.ok">OK</button>
+    </div>
   </div>
+</div>
 
-  <div class="total-box">
-    <span class="total-caption" id="totalCaption">Total spent</span>
-    <span class="total-amount" id="totalAmount">$0.00</span>
+<!-- ===== Main app ===== -->
+<div id="appRoot" class="hidden">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div class="overview-wrap">
+        <button id="overviewBtn" class="overview-btn">
+          <span id="overviewLabel">Monthly View</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="overviewMenu" class="overview-menu hidden">
+          <button data-view="yearly" data-i18n="overview.yearly">Yearly View</button>
+          <button data-view="calendar" data-i18n="overview.calendar">Calendar Daily View</button>
+          <button data-view="monthly" data-i18n="overview.monthly">Monthly View</button>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+          <span id="themeIcon">☀️</span>
+        </button>
+        <button id="langToggle" class="lang-btn" aria-label="Toggle language">EN</button>
+        <button id="profileBtn" class="icon-btn profile-btn" aria-label="Profile">
+          <span id="profileInitial">?</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="period-nav">
+      <button id="prevPeriod" class="nav-arrow" aria-label="Previous">‹</button>
+      <span id="periodLabel" class="period-label"></span>
+      <button id="nextPeriod" class="nav-arrow" aria-label="Next">›</button>
+    </div>
+
+    <div class="total-box">
+      <span class="total-caption" id="totalCaption">Total spent</span>
+      <span class="total-amount" id="totalAmount">$0.00</span>
+    </div>
+  </header>
+
+  <main id="viewContent" class="view-content"></main>
+
+  <button id="fabAdd" class="fab" aria-label="Add expense">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+  </button>
+</div>
+
+<!-- ===== Profile view modal ===== -->
+<div id="profileOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="profileViewTitle" data-i18n="profile.title">Profile</h2>
+      <button id="closeProfileBtn" class="close-btn" aria-label="Close">&times;</button>
+    </div>
+
+    <div class="current-profile">
+      <span class="profile-avatar" id="profileAvatarInitial">?</span>
+      <span id="currentProfileName" class="current-profile-name"></span>
+    </div>
+
+    <div class="field-label" id="savedProfilesLabel" data-i18n="profile.savedProfiles">Saved profiles</div>
+    <div id="profileSwitchList" class="profile-list"></div>
+
+    <div class="form-footer profile-footer">
+      <button id="profileNewBtn" class="secondary-btn" data-i18n="profile.newProfile">+ New Profile</button>
+      <button id="profileLogoutBtn" class="logout-btn" data-i18n="profile.logout">Log Out</button>
+    </div>
   </div>
-</header>
+</div>
 
-<main id="viewContent" class="view-content"></main>
-
-<button id="fabAdd" class="fab" aria-label="Add expense">
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
-</button>
-
+<!-- ===== Add / Edit expense modal ===== -->
 <div id="modalOverlay" class="modal-overlay hidden">
   <div class="modal">
     <div class="modal-header">
@@ -47,30 +118,56 @@
     </div>
 
     <form id="expenseForm">
-      <label class="field-label" for="categorySelect">Category</label>
-      <select id="categorySelect" required>
-        <option value="" disabled selected>Select category</option>
-      </select>
+      <div class="label-row">
+        <label class="field-label" id="categoryFieldLabel" for="categorySelect" data-i18n="field.category">Category</label>
+        <button type="button" id="categorySettingsBtn" class="dots-btn" aria-label="Manage categories">⋮</button>
+      </div>
+      <select id="categorySelect" required></select>
 
-      <label class="field-label" for="amountInput">Amount</label>
+      <label class="field-label" id="amountFieldLabel" for="amountInput" data-i18n="field.amount">Amount</label>
       <input type="number" id="amountInput" step="0.01" min="0" placeholder="0.00" required />
 
-      <label class="field-label" for="noteInput">Note</label>
-      <textarea id="noteInput" rows="3" placeholder="Add a note (optional)"></textarea>
+      <label class="field-label" id="noteFieldLabel" for="noteInput" data-i18n="field.note">Note</label>
+      <textarea id="noteInput" rows="3" data-i18n-placeholder="field.notePlaceholder" placeholder="Add a note (optional)"></textarea>
 
-      <label class="field-label" for="dateInput">Date</label>
+      <label class="field-label" id="dateFieldLabel" for="dateInput" data-i18n="field.date">Date</label>
       <input type="date" id="dateInput" required />
 
       <input type="hidden" id="editingId" value="" />
 
       <div class="form-footer">
-        <button type="button" id="deleteBtn" class="delete-btn hidden">Delete</button>
-        <button type="submit" class="save-btn">SAVE</button>
+        <button type="button" id="deleteBtn" class="delete-btn hidden" data-i18n="btn.delete">Delete</button>
+        <button type="submit" class="save-btn" id="saveExpenseBtn" data-i18n="btn.save">SAVE</button>
       </div>
     </form>
   </div>
 </div>
 
+<!-- ===== Category manager modal ===== -->
+<div id="categoryManagerOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="catManagerTitle" data-i18n="categoryManager.title">Manage Categories</h2>
+      <button id="closeCatManagerBtn" class="close-btn" aria-label="Close">&times;</button>
+    </div>
+
+    <div id="categoryManagerList" class="category-manager-list"></div>
+
+    <button id="addCategoryBtn" class="secondary-btn" data-i18n="categoryManager.addNew">+ Add category</button>
+
+    <div id="categoryEditForm" class="category-edit-form hidden">
+      <div class="icon-grid" id="iconGrid"></div>
+      <input id="categoryNameInput" type="text" data-i18n-placeholder="categoryManager.namePlaceholder" placeholder="Category name" />
+      <input type="hidden" id="categoryEditingId" value="" />
+      <div class="form-footer">
+        <button type="button" id="categoryCancelBtn" class="delete-btn" data-i18n="btn.cancel">Cancel</button>
+        <button type="button" id="categorySaveBtn" class="save-btn" data-i18n="btn.saveCategory">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="i18n.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
