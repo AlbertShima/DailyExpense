@@ -1,3 +1,6 @@
 node_modules/
 dist/
 reports/
+.features-gen/
+playwright-report/
+test-results/

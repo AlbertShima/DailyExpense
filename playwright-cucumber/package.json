@@ -6,7 +6,12 @@
   "scripts": {
     "test": "cucumber-js",
     "test:headed": "cross-env HEADLESS=false cucumber-js",
-    "install:browsers": "playwright install chromium"
+    "test:debug": "cross-env PWDEBUG=1 cucumber-js",
+    "install:browsers": "playwright install chromium",
+    "bddgen": "bddgen",
+    "test:pw": "npm run bddgen && playwright test",
+    "test:pw:headed": "npm run bddgen && playwright test --headed",
+    "test:ui": "npm run bddgen && playwright test --ui"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.2.0",
@@ -14,6 +19,7 @@
     "@types/node": "^20.14.10",
     "cross-env": "^7.0.3",
     "playwright": "^1.48.0",
+    "playwright-bdd": "^9.2.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   }
